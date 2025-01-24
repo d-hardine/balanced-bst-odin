@@ -1,0 +1,21 @@
+{
+  "name": "balanced-bst-odin",
+  "version": "1.0.0",
+  "description": "Balanced Binary Search Tree Object for The Odin Project",
+  "main": "binary-search-tree.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d-hardine/balanced-bst-odin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/d-hardine/balanced-bst-odin/issues"
+  },
+  "homepage": "https://github.com/d-hardine/balanced-bst-odin#readme",
+  "type": "module"
+}
