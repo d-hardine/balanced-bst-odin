@@ -1,3 +1,5 @@
+//for practice purpose, not the actual code for Odin
+
 //basic binary search tree
 class Node {
     constructor(data) {
@@ -36,7 +38,7 @@ const arr = [1,2,3,4,5,6,7]
 const root = sortedArrToBST(arr)
 preOrder(root)
 
-//advanced binary search tree
+//balanced binary search tree
 class Node {
     constructor(data) {
         this.data = data;
