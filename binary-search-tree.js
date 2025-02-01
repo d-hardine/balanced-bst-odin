@@ -1,8 +1,8 @@
 import { mergeSort } from "./merge-sort.js"
 
 let randomArray1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-let randomArray2 = [1,5,7,8,12,43,66,888, 888]
-let randomArray3 = [50,30,70,20,40,60,80,32,65,75,85,32,34,36]
+let randomArray2 = [50,30,70,20,40,60,80]
+let randomArray3 = []
 
 class Node {
     constructor(data) {
@@ -86,9 +86,10 @@ class Tree {
 
     delete(value) {
         let node = this.root;
+
         function deleteNode(value, node) {
             if(node === null) {
-                return null
+                return null;
             }
 
             if(value < node.data) {
@@ -101,28 +102,185 @@ class Tree {
                 if(node.left === null && node.right === null) {
                     return null;
                 } else if(node.left === null) {
-                    return node.right
+                    return node.right;
                 } else if(node.right === null) {
-                    return node.left
-                } //else if(node.left !== null && node.right !== null) {
-                    //console.log(node.right)
-                    //findSmallest(node.right)
-                //}
+                    return node.left;
+                } else if(node.left !== null && node.right !== null) {
+                    let tempNode = node.right;
+                    while(tempNode.left !== null) {
+                        tempNode = tempNode.left;
+                    }
+                    deleteNode(tempNode.data, node.right);
+                    node.data = tempNode.data;
+                    return node;
+                }
             }
         }
         deleteNode(value, node)
+    }
 
-        /*function findSmallest(node) {
-            if(node.left !== null)
-                findSmallest(node)
-            console.log(node.data)
-            return node.data
-        }*/
-    }    
+    find(value) {
+        let node = this.root;
+        while(node !== null) {
+            if(value > node.data)
+                node = node.right;
+            else if(value < node.data)
+                node = node.left;
+            else if(value === node.data) {
+                this.prettyPrint(node)
+                return node
+            }
+        }
+        console.log('not found')
+    }
+
+    levelOrder() {
+        let levelOrderArray = []
+        let queue = []
+        if(this.root !== null) {
+            queue.push(this.root);
+            while(queue.length > 0) {
+                let node = queue.shift();
+                levelOrderArray.push(node.data);
+                if(node.left !==  null)
+                    queue.push(node.left)
+                if(node.right !== null)
+                    queue.push(node.right)
+                }
+            return levelOrderArray;
+        } else
+            return null;
+    }
+
+    inOrder() {
+        if(this.root === null)
+            return null;
+        else {
+            let inOrderArray = [];
+            function traverseInOrder(node) {
+                if(node.left !== null)
+                    traverseInOrder(node.left);
+                inOrderArray.push(node.data);
+                if(node.right !== null)
+                    traverseInOrder(node.right);
+            }
+            traverseInOrder(this.root);
+            return inOrderArray;
+        }
+    }
+
+    preOrder() {
+        if(this.root === null)
+            return null;
+        else {
+            let preOrderArray = [];
+            function traversePreOrder(node) {
+                preOrderArray.push(node.data);
+                if(node.left !== null)
+                    traversePreOrder(node.left);
+                if(node.right !== null)
+                    traversePreOrder(node.right);
+            }
+            traversePreOrder(this.root);
+            return preOrderArray;
+        }
+    }
+
+    postOrder() {
+        if(this.root === null)
+            return null;
+        else {
+            let postOrderArray = [];
+            function traversePostOrder(node) {
+                if(node.left !== null)
+                    traversePostOrder(node.left);
+                if(node.right !== null)
+                    traversePostOrder(node.right);
+                postOrderArray.push(node.data);
+            }
+            traversePostOrder(this.root);
+            return postOrderArray;
+        }
+    }
+
+    minHeight(node = this.root) {
+        if(node == null)
+            return -1;
+
+        if(typeof node === 'number') {
+            node = this.find(node)
+        }
+
+        let left = this.minHeight(node.left)
+        let right = this.minHeight(node.right)
+        //console.log("node: " + node.data + " ,left: " + left + " ,right: " + right);
+
+        if(left < right)
+            return left + 1;
+        else
+            return right + 1;
+    };
+
+    height(node = this.root) {
+        if(node == null)
+            return -1;
+
+        let left = this.height(node.left)
+        let right = this.height(node.right)
+        //console.log("node: " + node.data + " ,left: " + left + " ,right: " + right);
+
+        if(left > right)
+            return left + 1;
+        else
+            return right + 1;
+    };
+
+    depth(value) {
+        let node = this.root;
+        let count = 0;
+        while(node !== null) {
+            if(value > node.data) {
+                node = node.right;
+                count += 1
+            } else if(value < node.data) {
+                node = node.left;
+                count += 1
+            }                
+            else if(value === node.data) {
+                return count;
+            }
+        }
+        return 'not found'
+    }
+
+    isBalanced() {
+        let minHeight = this.minHeight();
+        let maxHeight = this.height();
+        if(minHeight >= maxHeight - 1)
+            return true;
+        else
+            return false;
+    }
+
+    rebalance() {
+        let newArray = this.inOrder();
+        return this.arrToBSTRecur(newArray, 0, newArray.length - 1)
+    }
 }
 
 let test = new Tree()
-test.buildTree(randomArray3)
-test.insert(62)
-test.delete(32)
+test.buildTree(randomArray1)
+test.insert(27)
+//test.delete(50)
+//console.log(test.find(4))
 test.prettyPrint()
+console.log(test.minHeight())
+console.log(test.height())
+console.log(test.depth(23))
+console.log(test.isBalanced())
+test.rebalance()
+test.prettyPrint()
+//console.log(test.levelOrder())
+//console.log(test.inOrder())
+//console.log(test.preOrder())
+//console.log(test.postOrder())
